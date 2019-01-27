@@ -19,7 +19,7 @@ var vm = new Vue({
         },
     },
     mounted: function(){
-        axios.get(this.host + '/areas/', {
+        axios.get(this.host + 'index/areas/', {
                 responseType: 'json'
             })
             .then(response => {
@@ -32,7 +32,7 @@ var vm = new Vue({
     watch: {
         'form_address.province_id': function(){
             if (this.form_address.province_id) {
-                axios.get(this.host + '/areas/'+ this.form_address.province_id + '/', {
+                axios.get(this.host + 'index/areas/'+ this.form_address.province_id + '/', {
                         responseType: 'json'
                     })
                     .then(response => {
@@ -46,7 +46,7 @@ var vm = new Vue({
         },
         'form_address.city_id': function(){
             if (this.form_address.city_id){
-                axios.get(this.host + '/areas/'+ this.form_address.city_id + '/', {
+                axios.get(this.host + 'index/areas/'+ this.form_address.city_id + '/', {
                         responseType: 'json'
                     })
                     .then(response => {
@@ -123,21 +123,6 @@ var vm = new Vue({
                     })
                 }
             }
-        },
-        // 设置默认地址
-        set_default: function(index){
-            axios.put(this.host + '/addresses/' + this.addresses[index].id + '/status/', {}, {
-                    headers: {
-                        'Authorization': 'JWT ' + this.token
-                    },
-                    responseType: 'json'
-                })
-                .then(response => {
-                    this.default_address_id = this.addresses[index].id;
-                })
-                .catch(error => {
-                    console.log(error.response.data);
-                })
         },
     }
 });
