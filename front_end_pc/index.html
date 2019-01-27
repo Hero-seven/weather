@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <!-- ECharts单文件引入 -->
+    <script src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="js/axios-0.18.0.min.js"></script>
+    <style type="text/css">
+        h3 {
+            width: 400px;
+            height: 60px;
+            text-align: center;
+            margin: auto;
+        }
+
+    </style>
+</head>
+<body>
+<div class="form_group">
+    <label>选择城市：</label>
+    <select v-model="form_address.province_id">
+        <option v-for="province in provinces" v-bind:value="province.id">{{ province.name }}</option>
+    </select>
+    <select v-model="form_address.city_id">
+        <option v-for="city in cities" v-bind:value="city.id">{{ city.name }}</option>
+    </select>
+    <select v-model="form_address.district_id">
+        <option v-for="district in districts" v-bind:value="district.id">{{ district.name }}</option>
+    </select>
+</div>
+<h3>{{ district.name }}降水量和气温统计</h3>
+<table>
+    <tr>
+        <td>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="precipitation" style="width: 600px;height:400px;"></div>
+            <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('precipitation'), 'dark');
+
+                // 指定图表的配置项和数据
+                option = {
+                    title: {
+                        text: '降水量(mm)',
+                        align: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+
+                        {
+                            name: '降水量',
+                            type: 'bar',
+                            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                            markPoint: {
+                                data: [
+                                    {name: '年最高', value: 182.2, xAxis: 7, yAxis: 183},
+                                    {name: '年最低', value: 2.3, xAxis: 11, yAxis: 3}
+                                ]
+                            },
+                            markLine: {
+                                data: [
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            </script>
+        </td>
+        <td>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="temperature" style="width: 600px;height:400px;"></div>
+            <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('temperature'), 'dark');
+
+                // 指定图表的配置项和数据
+                option = {
+                    title: {
+                        text: '气温(℃)',
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series:
+                        {
+                            name: '气温',
+                            type: 'line',
+                            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                            markPoint: {
+                                data: [
+                                    {type: 'max', name: '最大值'},
+                                    {type: 'min', name: '最小值'}
+                                ]
+                            },
+                            markLine: {
+                                data: [
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            }
+                        }
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            </script>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
