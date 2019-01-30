@@ -31,7 +31,7 @@ def draw_chart(data, row, city):
 
 def main():
     # 读取数据
-    csv_data = pd.read_csv("./backup/precipitation.csv")
+    csv_data = pd.read_csv("./data/precipitation.csv")
     # 设置索引
     data = csv_data.set_index("city")
     # 指定数据行

@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))  # 添加apps到搜索路径列表
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -25,7 +26,7 @@ SECRET_KEY = 'po=n-cgbmbm(ieruh43iwx1-b6e8$wf^d^c3$e47&^*he2d82w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -39,10 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 添加DRF应用
-    'rest_framework'
+    'rest_framework',
+
+    # 跨域CORS
+    'corsheaders',
 
     # 注册子应用
-    'city_weather.apps.city_weatherConfig',
+    'city_weather.apps.CityWeatherConfig',
 ]
 
 MIDDLEWARE = [
@@ -53,14 +57,24 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:8080',
+    'localhost:8080',
+)
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'weather.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,7 +98,7 @@ DATABASES = {
     'ENGINE': 'django.db.backends.mysql',
     'HOST': '127.0.0.1', # 数据库主机
     'PORT': 3306, # 数据库端口
-    'USER': 'user1', # 数据库用户名
+    'USER': 'root', # 数据库用户名
     'PASSWORD': 'mysql', # 数据库用户密码
     'NAME': 'weather' # 数据库名字
     }
@@ -172,8 +186,4 @@ LOGGING = {
     }
 }
 
-# DRF配置
-REST_FRAMEWORK = {
-
-}
 

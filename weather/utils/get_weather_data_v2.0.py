@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+import os
 
 import requests
 import pprint
 import csv
 
 from lxml import etree
-
-from utils.get_city_data import get_city_data
+from weather.settings import BASE_DIR
 
 
 def get_city_url_list():
@@ -40,10 +40,10 @@ def get_city_url_list():
     return city_url_list
 
 
-def get_precipitation_data(city_url):
+def get_precipitation_data(url_data):
     """获取某个城市降水量信息"""
     # 获取网页内容
-    response = requests.get(city_url)
+    response = requests.get(url_data["district_url"])
     content = response.content.decode("utf-8")
     # pprint.pprint(content)
     # 提取数据
@@ -51,18 +51,18 @@ def get_precipitation_data(city_url):
     eroot = etree.HTML(content)
     # 获取降水量数据列表
     str_list = eroot.xpath("//span[@class='blk6_i_res']/text()")
-    data = [float(str[0:-2]) for str in str_list]
-    city_name = eroot.xpath("//h4[@class='slider_ct_name']/text()")
+    data_real = [float(str[0:-2]) for str in str_list]
     # 添加城市信息
-    data.insert(0, city_name[0])
+    data = [url_data["province_name"], url_data["city_name"], url_data["district_name"]]
+    data.extend(data_real)
     print(data)
     return data
 
 
-def get_temperature_list(city_url):
+def get_temperature_list(url_data):
     """获取某个城市的气温"""
     # 获取网页内容
-    response = requests.get(city_url)
+    response = requests.get(url_data["district_url"])
     content = response.content.decode("utf-8")
     # pprint.pprint(content)
     # 提取数据
@@ -71,62 +71,71 @@ def get_temperature_list(city_url):
     # 获取气温数据列表
     str_list = eroot.xpath("//div[@class ='blk6_c0_1']/@data-daymthtemp")
     data_list = str_list[0].split(",")
-    data = [float(data) for data in data_list if data]
-    city_name = eroot.xpath("//h4[@class='slider_ct_name']/text()")
+    data_real = [float(data) for data in data_list if data]
     # 添加城市信息
-    data.insert(0, city_name[0])
+    data = [url_data["province_name"], url_data["city_name"], url_data["district_name"]]
+    data.extend(data_real)
     print(data)
     return data
 
 
-def save_precipitation_data(city_url_list):
+def save_precipitation_data(url_data_list):
     # 保存数据至csv文件
     with open("./data/precipitation.csv", "w", newline="", encoding='utf-8') as f:
         f_csv = csv.writer(f, dialect="excel")
         # 写入表头
-        row = ["city", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+        row = ["province", "city", "district", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct",
+               "Nov", "Dec"]
         f_csv.writerow(row)
 
-        # 循环遍历所有城市降水量数据
-        for city_url in city_url_list:
+        for url_data in url_data_list:
             # 获取降水量数据
-            data = get_precipitation_data(city_url)
+            data = get_precipitation_data(url_data)
             # 写入数据
             f_csv.writerow(data)
 
 
-def save_temperature_data(city_url_list):
+def save_temperature_data(url_data_list):
     # 保存数据至csv文件
     with open("./data/temperature.csv", "w", newline="", encoding='utf-8') as f:
         f_csv = csv.writer(f, dialect="excel")
         # 写入表头
-        row = ["city", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+        row = ["province", "city", "district", "city", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept",
+               "Oct", "Nov", "Dec"]
         f_csv.writerow(row)
 
-        # 循环遍历所有城市降水量数据
-        for city_url in city_url_list:
+        for url_data in url_data_list:
             # 获取气温数据
-            data = get_temperature_list(city_url)
+            data = get_temperature_list(url_data)
             # 写入数据
             f_csv.writerow(data)
 
 
 def main():
-    # 获取所有城市列表
-    url_data_list = get_city_data()
+    # 获取所有城市信息
+    file_path = os.path.join(os.path.dirname(BASE_DIR), 'utils/data/areas.csv')
+    url_data_list = []
+    with open(file_path) as f:
+        data_list = csv.reader(f)
+        for data in data_list:
+            url_data = {
+                "province_name": data[0],
+                "city_name": data[1],
+                "district_name": data[2],
+                "district_url": data[3]
+            }
+            pprint.pprint(url_data)
+            url_data_list.append(url_data)
 
-    for url_data in url_data_list:
-        print(url_data["province_name"])
-        print(url_data["city_name"])
-        print(url_data["district_name"])
-        print(url_data["district_url"])
+    url_data_list = url_data_list[1:]
 
 
-        # 获取降水量数据并保存至csv文件
-        save_precipitation_data(url_data)
+    # 获取降水量数据并保存至csv文件
+    save_precipitation_data(url_data_list)
 
-        # 获取气温数据并保存至csv文件
-        save_temperature_data(url_data)
+
+    # 获取气温数据并保存至csv文件
+    save_temperature_data(url_data_list)
 
 
 if __name__ == '__main__':

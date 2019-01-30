@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include("city_weather.urls")),
-    # url(r'^users/index/$', city_weather.views.LoginView.as_view())
 ]
