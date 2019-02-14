@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <!-- ECharts单文件引入 -->
+    <script src="../statics/js/echarts.min.js"></script>
+    <script type="text/javascript" src="../statics/js/hosts.js"></script>
+    <script type="text/javascript" src="../statics/js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="../statics/js/axios-0.18.0.min.js"></script>
+    <style type="text/css">
+        h3 {
+            width: 400px;
+            height: 60px;
+            text-align: center;
+            margin: auto;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="city" class="form_group">
+        <label>选择城市：</label>
+        <select id="province" v-model="form_address.province_id">
+            <option v-for="province in provinces" v-bind:value="province.id">{{ province.name }}</option>
+        </select>
+        <select id="city" v-model="form_address.city_id">
+            <option v-for="city in cities" v-bind:value="city.id">{{ city.name }}</option>
+        </select>
+        <select id="district" v-model="form_address.district_id">
+            <option v-for="district in districts" v-bind:value="district.id">{{ district.name }}</option>
+        </select>
+        <h3>{{ district_name }}降水量和气温统计</h3>
+    </div>
+    <div id="data_chart" class="data_chart">
+    <table>
+        <tr>
+        <td>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="precipitation" style="width: 600px;height:400px;"></div>
+        </td>
+        <td>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="temperature" style="width: 600px;height:400px;"></div>
+
+        </td>
+    </tr>
+    </table>
+    </div>
+</div>
+<script type="text/javascript" src="../statics/js/index.js"></script>
+
+</body>
+</html>

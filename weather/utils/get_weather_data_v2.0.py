@@ -7,7 +7,7 @@ import pprint
 import csv
 
 from lxml import etree
-from weather.settings import BASE_DIR
+from settings import BASE_DIR
 
 
 def get_city_url_list():

@@ -66,6 +66,8 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     '127.0.0.1:8080',
     'localhost:8080',
+    '127.0.0.1:8081'
+
 )
 CORS_ALLOW_CREDENTIALS = True
 
@@ -74,7 +76,8 @@ ROOT_URLCONF = 'weather.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,15 +96,20 @@ WSGI_APPLICATION = 'weather.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-    'ENGINE': 'django.db.backends.mysql',
-    'HOST': '127.0.0.1', # 数据库主机
-    'PORT': 3306, # 数据库端口
-    'USER': 'root', # 数据库用户名
-    'PASSWORD': 'mysql', # 数据库用户密码
-    'NAME': 'weather' # 数据库名字
-    }
+DATABASES = {'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': "utils/mydatabase.db",
+    },
+
+
+    # 'default': {
+    # 'ENGINE': 'django.db.backends.mysql',
+    # 'HOST': '127.0.0.1', # 数据库主机
+    # 'PORT': 3306, # 数据库端口
+    # 'USER': 'root', # 数据库用户名
+    # 'PASSWORD': 'mysql', # 数据库用户密码
+    # 'NAME': 'weather' # 数据库名字
+    # }
 }
 
 
@@ -143,6 +151,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 # 配置日志
 LOGGING = {

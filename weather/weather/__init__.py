@@ -1,3 +1,3 @@
-import pymysql
+import sqlite3
 
-pymysql.install_as_MySQLdb()
+sqlite3.connect('mydatabase.db')
