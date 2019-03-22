@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from city_weather.models import Area
+
+
+@admin.register(Area)
+class PhoneAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', "parent")

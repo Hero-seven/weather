@@ -7,6 +7,7 @@ import pprint
 import csv
 
 from lxml import etree
+
 from settings import BASE_DIR
 
 

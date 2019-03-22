@@ -23,4 +23,5 @@ from . import settings
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   url(r'^', include("city_weather.urls")),
+                  url(r'^', include("weather_hour.urls")),
               ] # + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

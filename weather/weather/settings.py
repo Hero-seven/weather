@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
 
     # 注册子应用
     'city_weather.apps.CityWeatherConfig',
+    'weather_hour.apps.WeatherHourConfig',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +60,6 @@ MIDDLEWARE = [
 
     'corsheaders.middleware.CorsMiddleware',
 ]
-
 
 # CORS
 CORS_ORIGIN_WHITELIST = (
@@ -92,26 +91,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'weather.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': "utils/mydatabase.db",
-    },
-
-
+DATABASES = {
     # 'default': {
-    # 'ENGINE': 'django.db.backends.mysql',
-    # 'HOST': '127.0.0.1', # 数据库主机
-    # 'PORT': 3306, # 数据库端口
-    # 'USER': 'root', # 数据库用户名
-    # 'PASSWORD': 'mysql', # 数据库用户密码
-    # 'NAME': 'weather' # 数据库名字
-    # }
-}
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': "utils/mydatabase.db",
+    # },
 
+    "default": {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'weather',
+        'HOST': '',
+        'PORT': '5432',
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -131,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -145,7 +139,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -196,5 +189,3 @@ LOGGING = {
         },
     }
 }
-
-
